@@ -130,9 +130,29 @@ pytest tests/ -v
 
 See [`results.md`](results.md) / [`results.json`](results.json) for the full numbers from the actual
 training run used in this repository (exact dataset size, per-class precision/recall/F1, confusion
-matrix). Summary:
+matrix). Summary from that real run:
 
-<!-- RESULTS_SUMMARY_PLACEHOLDER -->
+- **Landmark extraction**: 10,873 source images attempted -> hand detected in **8,399 (77.2%)**. The
+  remaining ~23% are images MediaPipe couldn't find a confident hand in (cropped/occluded hands, unusual
+  angles) and were correctly dropped rather than fed to the classifier as noise.
+- **Split**: 8,399 samples -> 5,879 train / 1,260 val / 1,260 test (stratified 70/15/15).
+- **Training**: 25.2s on CPU, 60 epochs, early stopping on validation loss.
+- **Test set (1,260 held-out samples, never seen during training)**:
+
+  | Metric | Value |
+  |---|---|
+  | Accuracy | **0.9183** |
+  | Macro precision | 0.9180 |
+  | Macro recall | 0.9164 |
+  | Macro F1 | **0.9160** |
+
+  Weakest classes were letters that are visually similar in this dataset's hand poses (`U` P=0.833/R=0.816,
+  `Z` P=0.875/R=0.761, `P` P=0.841/R=0.787); strongest were visually distinct shapes (`A`, `L`, `Y` all
+  >=0.97 F1). Full per-class table and confusion matrix: `results.md` / `results_confusion_matrix.png`.
+- **End-to-end verification**: the CLI (`python -m asl_detection.infer`) and the Flask `/predict` endpoint
+  were both run against real held-out sample photos from the source dataset (not synthetic data) during
+  development and correctly classified them with high confidence -- e.g. a real "B" photo posted to
+  `/predict` returned `{"letter": "B", "confidence": 0.998, ...}`.
 
 ## Limitations
 
