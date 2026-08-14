@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+
+      # Install the CPU-only PyTorch build explicitly first so we don't pull
+      # a multi-GB CUDA wheel on this GPU-less CI runner; the matching
+      # version in requirements.txt is then already satisfied.
+      - name: Install PyTorch (CPU build)
+        run: pip install torch==2.8.0 --index-url https://download.pytorch.org/whl/cpu
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install -e . --no-deps
+
+      - name: Lint with ruff
+        run: ruff check .
+
+      - name: Run fast unit tests
+        run: pytest tests/ -v
