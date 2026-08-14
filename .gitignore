@@ -1,0 +1,20 @@
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# Downloaded model weights / vendor binaries (fetched via scripts/download_mediapipe_model.py)
+models/mediapipe/
+
+# HuggingFace dataset cache
+.cache/
+data/landmarks.parquet
+data/extraction_log.txt
+
+# OS
+.DS_Store
+Thumbs.db
