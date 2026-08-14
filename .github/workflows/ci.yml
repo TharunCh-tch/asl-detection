@@ -23,6 +23,14 @@ jobs:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
 
+      # MediaPipe's native library (libmediapipe.so) links against libEGL/libGL
+      # even for CPU-only, headless image construction/inference -- these
+      # aren't present on the bare ubuntu-latest runner image.
+      - name: Install system GL libs (required by MediaPipe's native library)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1 libgl1 libgles2 libglib2.0-0 libsm6 libxext6 libxrender1 libgomp1
+
       # Install the CPU-only PyTorch build explicitly first so we don't pull
       # a multi-GB CUDA wheel on this GPU-less CI runner; the matching
       # version in requirements.txt is then already satisfied.
