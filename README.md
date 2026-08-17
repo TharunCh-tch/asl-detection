@@ -9,6 +9,18 @@ was previously only described on LinkedIn and never published as code. This repo
 rebuild: real dataset, real training run, real measured numbers (see [Results](#results)) -- not a
 reproduction of any specific historical benchmark.
 
+## Screenshots
+
+Real screenshots from a locally-run instance of the Streamlit UI (`streamlit run src/asl_detection/app_streamlit.py`),
+uploading a real photo from the source dataset.
+
+| Streamlit UI | Real prediction result |
+|---|---|
+| ![Streamlit UI](docs/screenshots/streamlit-ui.jpg) | ![Prediction: B, 99.8% confidence](docs/screenshots/streamlit-prediction-B.jpg) |
+
+The second screenshot shows a real "B" hand-sign photo uploaded through the UI, correctly classified as
+`B` with 99.8% confidence -- the same run referenced in [Results](#results) below.
+
 ## Problem
 
 Translate a static photo of a single ASL hand sign (the 26 letters A-Z) into the letter it represents,
