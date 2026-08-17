@@ -9,6 +9,24 @@ was previously only described on LinkedIn and never published as code. This repo
 rebuild: real dataset, real training run, real measured numbers (see [Results](#results)) -- not a
 reproduction of any specific historical benchmark.
 
+## Live demo
+
+A hosted live demo on [Streamlit Community Cloud](https://share.streamlit.io/) was attempted but is
+**not currently deployed**. The repo itself is deploy-ready -- `requirements.txt` is at the root,
+`src/asl_detection/app_streamlit.py` is a valid entrypoint, and `HandLandmarkExtractor` now
+auto-downloads its MediaPipe model file on first run (see `src/asl_detection/landmarks.py`) specifically
+so a fresh clone on a hosted platform works without a manual provisioning step. The blocker was the
+sign-in step itself: Streamlit Community Cloud requires clicking through a GitHub OAuth consent screen
+("Authorize streamlit"), and that specific click could not be completed via browser automation in this
+environment -- it visually registered but never submitted the form after repeated attempts with
+different interaction methods, most consistent with GitHub's own anti-automation protection on that
+security-sensitive page. Deploying is a two-minute manual step for anyone with repo access:
+
+1. Go to [share.streamlit.io](https://share.streamlit.io/) and sign in with GitHub.
+2. Click "Create app", select `TharunCh-tch/asl-detection`, branch `main`, entrypoint
+   `src/asl_detection/app_streamlit.py`.
+3. Deploy -- no extra config should be needed (see above).
+
 ## Screenshots
 
 Real screenshots from a locally-run instance of the Streamlit UI (`streamlit run src/asl_detection/app_streamlit.py`),
